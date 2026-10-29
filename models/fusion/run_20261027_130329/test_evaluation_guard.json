@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "split": "test",
+  "fusion_weights": {
+    "EEGNet + GCN": 0.25,
+    "Raw EEG Transformer": 0.25,
+    "STFT CRNN": 0.25,
+    "STFT Transformer": 0.25
+  }
+}

@@ -1,0 +1,643 @@
+{
+  "schema_version": 1,
+  "configuration_id": "eeg_emotion_four_model_adaptive_frozen_v1",
+  "status": "frozen",
+  "source_run": "models/fusion/adaptive_run_20261027_132228",
+  "source_run_created_at": "2026-10-27 13:22:28 local project time",
+  "class_order": [
+    "fear",
+    "happy",
+    "neutral",
+    "sad"
+  ],
+  "model_order": [
+    "EEGNet + GCN",
+    "Raw EEG Transformer",
+    "STFT CRNN",
+    "STFT Transformer"
+  ],
+  "splits": {
+    "train": {
+      "fear": [
+        "1_20160518_trial11",
+        "1_20160518_trial18",
+        "1_20160518_trial2"
+      ],
+      "happy": [
+        "1_20160518_trial16",
+        "1_20160518_trial19",
+        "1_20160518_trial24"
+      ],
+      "neutral": [
+        "1_20160518_trial21",
+        "1_20160518_trial23",
+        "1_20160518_trial6",
+        "1_20160518_trial7"
+      ],
+      "sad": [
+        "1_20160518_trial10",
+        "1_20160518_trial14"
+      ]
+    },
+    "validation": {
+      "fear": [
+        "1_20160518_trial17"
+      ],
+      "happy": [
+        "1_20160518_trial20"
+      ],
+      "neutral": [
+        "1_20160518_trial4"
+      ],
+      "sad": [
+        "1_20160518_trial12"
+      ]
+    },
+    "test": {
+      "fear": [
+        "1_20160518_trial5"
+      ],
+      "happy": [
+        "1_20160518_trial22"
+      ],
+      "neutral": [
+        "1_20160518_trial9"
+      ],
+      "sad": [
+        "1_20160518_trial1"
+      ]
+    }
+  },
+  "input_assets": {
+    "raw_eeg": {
+      "root": "data/output",
+      "file_pattern": "{emotion}/{trial_id}.mat",
+      "mat_eeg_variable": "EEG",
+      "mat_label_variable": "label",
+      "mat_label_values_by_class": {
+        "fear": 2,
+        "happy": 3,
+        "neutral": 0,
+        "sad": 1
+      },
+      "file_count": 20,
+      "sha256": "d58f4da7b7981311876b77d5398292cb605d4cc4a7fed379e6d448b7f4456de5",
+      "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records",
+      "split_manifests": {
+        "train": {
+          "file_count": 12,
+          "sha256": "8ea440742d7edb679d2152c9e6ccaec55dd6d5e1ef5228c9f1609701cd24b6c3",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        },
+        "validation": {
+          "file_count": 4,
+          "sha256": "12b8c424edb3c2152cd1739efc6c55e899299e18bdc6510be870a4ff7af61a0c",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        },
+        "test": {
+          "file_count": 4,
+          "sha256": "4ae5e3af9a6ee951d0707a6db21fb5675a25479fc99d3f9132cd5d9fd40422a8",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        }
+      }
+    },
+    "stft_images": {
+      "root": "data/processed/crnn_dataset",
+      "file_pattern": "{split}/{emotion}/*.png",
+      "input_mode": "pre-rendered immutable PNG assets; inference reads these images directly and does not execute the STFT generator",
+      "file_count": 1024,
+      "sha256": "00973b8405255e681728b05029324de8106a64817cdb4340cdf3c75c8d21834b",
+      "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records",
+      "image_dimensions_px": [
+        1024,
+        1024
+      ],
+      "image_mode": "RGBA",
+      "class_split_counts": {
+        "train": {
+          "fear": 173,
+          "happy": 186,
+          "neutral": 175,
+          "sad": 140
+        },
+        "validation": {
+          "fear": 36,
+          "happy": 21,
+          "neutral": 38,
+          "sad": 46
+        },
+        "test": {
+          "fear": 47,
+          "happy": 49,
+          "neutral": 43,
+          "sad": 70
+        }
+      },
+      "split_manifests": {
+        "train": {
+          "file_count": 674,
+          "sha256": "2ecee5837ff359202f6c6231a324517aefb757ff2f15491ef8a05ce41dff1cbe",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        },
+        "validation": {
+          "file_count": 141,
+          "sha256": "5631d6c4729a5b9067385c52a821a8b83a06482c5da20b176f0ba9fb0b3b5489",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        },
+        "test": {
+          "file_count": 209,
+          "sha256": "00d3e060abf3f23aae33539d5ddcf4d8524110a6ee68ef2c5f9d99df8736250d",
+          "manifest_algorithm": "sha256 over sorted relative_path NUL file_sha256 LF records"
+        }
+      }
+    }
+  },
+  "common_raw_eeg_preprocessing": {
+    "sampling_rate_hz": 200,
+    "sampling_rate_status": "project assumption; MAT files do not store a sampling-rate field",
+    "input_shape": [
+      "channels",
+      "samples"
+    ],
+    "channels": 62,
+    "nan_and_infinity_replacement": 0.0,
+    "per_trial_operations_in_order": [
+      "convert to float64",
+      "replace NaN and +/-Inf with 0",
+      "subtract each channel mean over the full trial",
+      "4th-order Butterworth bandpass, 1.0-45.0 Hz, zero-phase scipy.signal.filtfilt along samples",
+      "linear detrend along samples",
+      "cast to float32"
+    ],
+    "windowing": {
+      "window_samples": 400,
+      "window_seconds_under_200_hz_assumption": 2.0,
+      "hop_samples": 100,
+      "hop_seconds_under_200_hz_assumption": 0.5,
+      "starts": "range(0, sample_count - window_samples + 1, hop_samples)",
+      "end_inclusive": true
+    },
+    "bandpass_hz": [
+      1.0,
+      45.0
+    ],
+    "filter_order": 4,
+    "filter_application": "zero-phase scipy.signal.filtfilt along samples",
+    "detrend_type": "linear",
+    "dc_removal": "subtract each channel mean over full trial"
+  },
+  "models": {
+    "EEGNet + GCN": {
+      "architecture": {
+        "class": "EEGNetGCN",
+        "num_classes": 4,
+        "temporal_conv": {
+          "filters": 8,
+          "kernel": [
+            1,
+            64
+          ]
+        },
+        "spatial_depthwise": {
+          "filters": 16,
+          "kernel": [
+            62,
+            1
+          ],
+          "groups": 8
+        },
+        "separable_depthwise_kernel": [
+          1,
+          16
+        ],
+        "node_projection": [
+          500,
+          32
+        ],
+        "gcn_hidden": [
+          64,
+          64
+        ],
+        "dropout_eval_disabled": true
+      },
+      "implementation": "src/fusion_engine.py",
+      "checkpoint": {
+        "path": "models/eegnet_gcn/run_20261027_122050/best_eegnet_gcn.pth",
+        "sha256": "c13adfc4b168a039c62bb9ebb763b1074a94168a3332b76d8e05f033958ec312",
+        "selection": "best validation checkpoint",
+        "best_epoch": 11,
+        "format": "checkpoint dictionary containing model_state_dict, class_names, and selected-epoch metadata"
+      },
+      "class_order": [
+        "fear",
+        "happy",
+        "neutral",
+        "sad"
+      ],
+      "preprocessing": {
+        "normalization": "per-channel train-only z-score; frozen values are in the referenced metadata",
+        "normalization_graph_metadata": {
+          "path": "models/eegnet_gcn/run_20261027_122050/normalization_and_graph.json",
+          "sha256": "98d8b263f4bbae2b6949933b69cbfbb174457cd73f24731d080b8e60bd4a7185"
+        },
+        "graph": "saved normalized absolute-correlation adjacency; equal trial weighting; TRAIN trials only"
+      }
+    },
+    "Raw EEG Transformer": {
+      "architecture": {
+        "class": "RawEEGTransformer",
+        "channels": 62,
+        "patch_size_samples": 25,
+        "patch_embedding_dim": 64,
+        "attention_heads": 4,
+        "encoder_layers": 2,
+        "feedforward_dim": 256,
+        "dropout": 0.1,
+        "num_classes": 4
+      },
+      "implementation": "src/fusion_engine.py",
+      "checkpoint": {
+        "path": "models/raw_eeg_transformer/run_20261027_123703/best_raw_eeg_transformer.pth",
+        "sha256": "06d3fb488b97e538647651be62372bc551cf4cc05c5c23115f150c8fb36ad5dc",
+        "selection": "best validation checkpoint",
+        "best_epoch": 21,
+        "format": "checkpoint dictionary containing model_state_dict, class_names, and selected-epoch metadata"
+      },
+      "class_order": [
+        "fear",
+        "happy",
+        "neutral",
+        "sad"
+      ],
+      "preprocessing": {
+        "normalization": "per-channel training-only z-score; population variance; std below 1e-8 replaced with 1.0",
+        "normalization_source": "12 fixed training trials only; 336412 samples",
+        "mean": [
+          1.3127200437779152e-09,
+          -2.917811131597503e-11,
+          -1.0062073396710502e-09,
+          5.77299319459712e-10,
+          8.087878283769001e-11,
+          -3.5755562399764074e-10,
+          4.2206509121012203e-11,
+          -1.1148263423521598e-09,
+          -6.359750504003614e-10,
+          5.889583820639643e-10,
+          5.395403915309238e-11,
+          9.429459435494891e-10,
+          8.440325660608039e-10,
+          1.090581847051908e-09,
+          4.0416342494964397e-10,
+          -8.106750271075214e-10,
+          3.5679445509195773e-10,
+          -3.63247154577806e-10,
+          9.882273888095483e-10,
+          -2.615634653313492e-10,
+          1.5051586643721748e-09,
+          9.892607844008694e-10,
+          8.621914293627242e-10,
+          -7.103425625487603e-10,
+          -8.410206975284495e-10,
+          -1.3370331508610889e-09,
+          -1.246702741042327e-10,
+          8.567939135950553e-10,
+          -1.508374397607426e-10,
+          3.515856772384751e-10,
+          4.983223833576744e-10,
+          -7.537519497446965e-10,
+          -1.0921848841993764e-10,
+          -1.1320111514834252e-09,
+          9.679455154065764e-11,
+          8.525584682672616e-10,
+          -1.5748784221170098e-10,
+          -1.1297761615125523e-09,
+          -5.438842154426027e-10,
+          8.361330516848398e-10,
+          -1.2667300541835402e-10,
+          1.3640066853781718e-10,
+          -5.479169340460999e-10,
+          1.2037901231387593e-10,
+          1.2069467647535248e-09,
+          7.748862107526122e-10,
+          8.691012354233862e-10,
+          1.8440590165980097e-09,
+          -1.2511623959099438e-09,
+          4.0115857857792037e-10,
+          -2.0629908892288995e-10,
+          1.670383970031608e-10,
+          -6.869487756411274e-10,
+          -2.3759169631709653e-10,
+          1.0241468784144558e-09,
+          5.528898450180009e-10,
+          -7.597850126828121e-11,
+          -1.2153678063953066e-10,
+          -4.66611305149911e-10,
+          -3.1615365880810486e-10,
+          -1.341804722887474e-10,
+          -1.3436680657008537e-09
+        ],
+        "std": [
+          23.25160789489746,
+          23.02031707763672,
+          23.238988876342773,
+          16.873170852661133,
+          18.155384063720703,
+          19.92035675048828,
+          16.44041633605957,
+          16.422239303588867,
+          16.22225570678711,
+          15.35341739654541,
+          15.640573501586914,
+          16.490102767944336,
+          18.188385009765625,
+          20.154678344726562,
+          17.6690616607666,
+          16.671371459960938,
+          16.091585159301758,
+          16.20852279663086,
+          14.594544410705566,
+          14.718111038208008,
+          15.270146369934082,
+          16.66927146911621,
+          18.49008560180664,
+          17.49683380126953,
+          15.888866424560547,
+          15.27175521850586,
+          14.60483455657959,
+          14.468622207641602,
+          14.361597061157227,
+          14.945259094238281,
+          16.069198608398438,
+          17.68447494506836,
+          16.209186553955078,
+          15.313525199890137,
+          15.257365226745605,
+          14.431236267089844,
+          14.287642478942871,
+          14.381400108337402,
+          14.775053977966309,
+          15.707137107849121,
+          16.829811096191406,
+          16.20899200439453,
+          16.185487747192383,
+          15.267902374267578,
+          14.96104621887207,
+          14.827125549316406,
+          14.802678108215332,
+          15.071845054626465,
+          15.95689582824707,
+          16.873510360717773,
+          16.687070846557617,
+          16.68026351928711,
+          16.724138259887695,
+          15.842720985412598,
+          16.235633850097656,
+          16.701942443847656,
+          17.766225814819336,
+          16.760622024536133,
+          16.72894287109375,
+          16.90407943725586,
+          17.364898681640625,
+          17.909317016601562
+        ],
+        "normalization_sample_count": 336412
+      }
+    },
+    "STFT CRNN": {
+      "architecture": {
+        "class": "EEGCRNN",
+        "input_channels": 3,
+        "conv_channels": [
+          32,
+          64,
+          128,
+          256
+        ],
+        "sequence_projection_dim": 256,
+        "lstm": {
+          "hidden_size": 128,
+          "layers": 2,
+          "bidirectional": true,
+          "dropout": 0.3
+        },
+        "num_classes": 4
+      },
+      "implementation": "src/fusion_engine.py",
+      "checkpoint": {
+        "path": "models/best_crnn_model.pth",
+        "sha256": "06c20a8b4b3e87ba644c6d41109d2189223f2ef9e28e48644ee6dc57b85dd8eb",
+        "selection": "original best-validation checkpoint; fixed-scale variants excluded",
+        "best_epoch": 10,
+        "format": "checkpoint dictionary containing model_state_dict, class_names, image_size, and selected-epoch metadata"
+      },
+      "class_order": [
+        "fear",
+        "happy",
+        "neutral",
+        "sad"
+      ],
+      "preprocessing": {
+        "dataset_root": "data/processed/crnn_dataset",
+        "image_conversion": "PIL RGB",
+        "resize_px": [
+          224,
+          224
+        ],
+        "interpolation": "bilinear",
+        "antialias": true,
+        "to_tensor_range": [
+          0.0,
+          1.0
+        ],
+        "normalize_mean": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "normalize_std": [
+          0.229,
+          0.224,
+          0.225
+        ],
+        "evaluation_is_deterministic": true
+      }
+    },
+    "STFT Transformer": {
+      "architecture": {
+        "class": "STFTTransformer",
+        "input_channels": 1,
+        "image_size": 224,
+        "patch_size": 16,
+        "embedding_dim": 64,
+        "attention_heads": 4,
+        "encoder_layers": 2,
+        "feedforward_dim": 256,
+        "dropout": 0.1,
+        "num_classes": 4
+      },
+      "implementation": "src/fusion_engine.py",
+      "checkpoint": {
+        "path": "models/best_transformer_model.pth",
+        "sha256": "d1e43de4b08ca3c550a799349d349516372a39252108d09964ee6d618a757c63",
+        "selection": "best validation checkpoint; checkpoint is a bare state_dict and epoch metadata is unavailable",
+        "best_epoch": null,
+        "format": "bare state_dict; class order is supplied by frozen configuration and checked ImageFolder folders"
+      },
+      "class_order": [
+        "fear",
+        "happy",
+        "neutral",
+        "sad"
+      ],
+      "preprocessing": {
+        "dataset_root": "data/processed/crnn_dataset",
+        "image_conversion": "PIL RGB then torchvision Grayscale(num_output_channels=1)",
+        "resize_px": [
+          224,
+          224
+        ],
+        "interpolation": "bilinear",
+        "antialias": true,
+        "to_tensor_range": [
+          0.0,
+          1.0
+        ],
+        "normalize_mean": [
+          0.5
+        ],
+        "normalize_std": [
+          0.5
+        ],
+        "evaluation_is_deterministic": true
+      },
+      "checkpoint_format": "bare state_dict; class order comes from the training script and checked ImageFolder folders"
+    }
+  },
+  "stft_raster_provenance": {
+    "current_inference_source": "The frozen crnn_dataset PNGs identified by input_assets.stft_images; no image regeneration occurs during current inference.",
+    "base_dataset_audit": "data/diagnostics/diagnostic_report.md, section 8 documents the original images as single-channel-0 EEG, 2-second windows with 0.5-second steps, STFT power-to-dB, per-image 5th-98th percentile clipping, and turbo rendering.",
+    "current_converter_status": "src/convert_to_spectrogram.py currently writes data/processed/stft_spectrograms_global using a shared training-only 1st-99th percentile scale. That alternate output is not part of this frozen pipeline.",
+    "immutable_asset_manifest_is_authoritative": true,
+    "stft_parameters_from_current_converter_and_fixedscale_provenance": {
+      "sampling_rate_hz": 200,
+      "channel_index": 0,
+      "cleaning": "replace nonfinite values with 0; remove DC; 4th-order 1-45 Hz Butterworth filtfilt when signal length > 30; linear detrend",
+      "window_samples": 400,
+      "hop_samples": 100,
+      "window_function": "hann",
+      "nperseg": 256,
+      "noverlap": 192,
+      "nfft": 512,
+      "detrend": "constant",
+      "boundary": null,
+      "padded": false,
+      "representation": "10*log10(abs(STFT)**2 + 1e-12), retain 1-45 Hz bins",
+      "base_image_scale_documented_by_audit": {
+        "type": "per-window percentile clip and automatic image color scaling",
+        "percentiles": [
+          5.0,
+          98.0
+        ]
+      },
+      "selection_documented_by_generator": "256 evenly spaced windows per emotion selected by np.linspace over available windows"
+    }
+  },
+  "prediction_aggregation": {
+    "window_output": "softmax(logits) in class_order",
+    "trial_probability": "arithmetic mean of the model per-window softmax vectors, followed by sum normalization",
+    "trial_prediction": "argmax of trial_probability; first index wins a tie (NumPy argmax)",
+    "trial_logits": "mean logits are diagnostic only and are not used for prediction",
+    "inference_batch_size": 32,
+    "model_mode": "eval; dropout disabled"
+  },
+  "fusion": {
+    "equal_weight_baseline": {
+      "weights": {
+        "EEGNet + GCN": 0.25,
+        "Raw EEG Transformer": 0.25,
+        "STFT CRNN": 0.25,
+        "STFT Transformer": 0.25
+      },
+      "fusion": "weighted sum of the four trial probability vectors, followed by sum normalization"
+    },
+    "adaptive": {
+      "method": "validation macro-F1 reliability prior multiplied by trial-specific normalized-entropy certainty gate, then per-trial weight normalization",
+      "validation_reliability_macro_f1": {
+        "EEGNet + GCN": 0.3333333333333333,
+        "Raw EEG Transformer": 0.375,
+        "STFT CRNN": 0.3333333333333333,
+        "STFT Transformer": 0.375
+      },
+      "reliability_prior_weights": {
+        "EEGNet + GCN": 0.23711340206185566,
+        "Raw EEG Transformer": 0.26288659793814434,
+        "STFT CRNN": 0.23711340206185566,
+        "STFT Transformer": 0.26288659793814434
+      },
+      "reliability_raw_score": "max(0, validation_macro_f1) + epsilon",
+      "epsilon": 0.05,
+      "entropy": "H(p) = -sum_c p_c * ln(max(p_c, 1e-15)); zero-probability terms contribute 0",
+      "normalized_entropy": "H(p) / ln(4)",
+      "certainty": "clip(1 - normalized_entropy, 0, 1)",
+      "gate": "epsilon + certainty",
+      "unnormalized_trial_weight": "reliability_prior_weight * gate",
+      "per_trial_weight": "unnormalized_trial_weight / sum_model(unnormalized_trial_weight)",
+      "fused_probability": "sum_model(per_trial_weight * trial_probability), followed by sum normalization",
+      "test_used_to_fit_or_configure": false,
+      "entropy_probability_floor": 1e-15,
+      "certainty_clip_range": [
+        0.0,
+        1.0
+      ],
+      "entropy_logarithm": "natural logarithm"
+    }
+  },
+  "runtime": {
+    "device_selection": "existing evaluator policy: MPS if available, otherwise CUDA if available, otherwise CPU",
+    "python": "3.11.9",
+    "torch": "2.14.1",
+    "torchvision": "0.29.1",
+    "scipy": "1.17.1",
+    "numpy": "2.4.6",
+    "scikit_learn": "1.9.1"
+  },
+  "frozen_evaluation_reference": {
+    "validation": {
+      "equal_weight_accuracy": 0.75,
+      "equal_weight_macro_f1": 0.6666666666666666,
+      "adaptive_accuracy": 0.75,
+      "adaptive_macro_f1": 0.6666666666666666
+    },
+    "test": {
+      "equal_weight_accuracy": 0.5,
+      "equal_weight_macro_f1": 0.375,
+      "adaptive_accuracy": 0.5,
+      "adaptive_macro_f1": 0.375
+    },
+    "prediction_files": {
+      "validation": "models/fusion/adaptive_run_20261027_132228/validation_predictions.csv",
+      "test": "models/fusion/adaptive_run_20261027_132228/test_predictions.csv"
+    },
+    "test_results_are_reference_only_and_must_never_be_used_to_modify_this_configuration": true
+  },
+  "freeze_rules": [
+    "Do not retrain the models or change their architecture under this configuration.",
+    "Do not tune any parameter using held-out test results.",
+    "Use this configuration as the single source for inference paths, class order, splits, preprocessing, and fusion.",
+    "Any future configuration change requires a separately versioned experiment using validation-only decisions and a new frozen release; test data remains untouched for tuning."
+  ],
+  "implementation_sources": {
+    "src/fusion_engine.py": "4f8eef4b545f5e41ede9e64eb6d0755a58b5a00311dcfb5dac73cca40dec4b83",
+    "src/inference_service.py": "0496b4c1e38efda5e5725429e4f5115db04fdedd35d9e6569e8df0d7edc70938",
+    "src/adaptive_fusion.py": "681bfd478265b115d9b710e8533e13fdd3b3a72e860b839634c75054e5eceec3",
+    "src/evaluate_adaptive_fusion.py": "398396e6f45750f15cdfbf9a8d4dad0e0b45d40815f51e8dca229937ae42033b",
+    "src/train_raw_eeg_transformer.py": "86501875d24c9f5de6bcf2a0252e79a2f8fa4732e96821bca02ebba3ea8c4caf",
+    "src/eegnet_gcn_data.py": "119e6afb57c3d0c8661b3fda00b06dc653a9ff4ea79636de920bf2b721838374",
+    "src/train_eegnet_gcn.py": "823209e6fa8653cd7d7d83bc9862ba0ff277a53035aedc886582ea52405fde14",
+    "src/train_crnn.py": "88010e9f706b7e6509821dbd4cc80330eeed584501ccc13ca234bcbc346d67a4",
+    "src/pytrash/train_crnn.py": "464a3ec7214ccc383b43c1b9eacf994dd04e1ecea5721cc5e37b90bfe4c9f4cf",
+    "src/train_transformer.py": "9bdb461e3b3c0e04ea0d3b717b4fd31a4d3f5c8a2dcd298a2676e7db7e8f0c82",
+    "src/convert_to_spectrogram.py": "0bdb5fb4bc995c12cbac195ab8c4102ca7cce367cc7df2850deae723af25d26b",
+    "src/prepare_crnn_dataset.py": "d8e0349802903e01b104be5c358031c6de6e21e7b58799ee3f92cc1fb94484ab"
+  }
+}

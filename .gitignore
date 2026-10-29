@@ -1,0 +1,21 @@
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Local EEG recordings, generated datasets, and run outputs
+/data/
+/output/
+/src/pytrash/
+
+# Generated experiment reports and prediction exports
+/models/**/results.json
+/models/**/fusion_report.md
+/models/**/*_predictions.csv
+/models/**/*.backup
+
+# Temporary files
+*.log
+*.tmp

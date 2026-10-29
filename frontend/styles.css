@@ -1,0 +1,997 @@
+#eeg-three-step-preview {
+      --page: light-dark(#edf3f6, #07111c);
+      --surface: light-dark(#ffffff, #0c1a29);
+      --surface-2: light-dark(#f4f8fa, #112338);
+      --surface-3: light-dark(#e6eef3, #1a3048);
+      --ink: light-dark(#13283a, #e9f2fa);
+      --muted: light-dark(#5d7182, #9aafc2);
+      --line: light-dark(#d4e0e8, #263b50);
+      --cyan: light-dark(#007d90, #40d7e7);
+      --blue: light-dark(#397ac3, #65a9ff);
+      --orange: light-dark(#b75120, #ff8f43);
+      --yellow: light-dark(#a57a0a, #ffd35c);
+      --green: light-dark(#18775b, #47d7a0);
+      --violet: light-dark(#6d58b9, #b49bff);
+      color-scheme: light dark;
+      color: var(--ink);
+      background: var(--page);
+      border-radius: 20px;
+      font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    #eeg-three-step-preview *,
+    #eeg-three-step-preview *::before,
+    #eeg-three-step-preview *::after { box-sizing: border-box; }
+
+    #eeg-three-step-preview .shell {
+      background:
+        radial-gradient(ellipse at 56% 0%, color-mix(in srgb, var(--blue) 12%, transparent), transparent 44%),
+        var(--page);
+      min-height: 690px;
+      padding: 18px;
+    }
+
+    #eeg-three-step-preview .topbar,
+    #eeg-three-step-preview .brand,
+    #eeg-three-step-preview .topbar-end,
+    #eeg-three-step-preview .heading-row,
+    #eeg-three-step-preview .panel-head,
+    #eeg-three-step-preview .file-row,
+    #eeg-three-step-preview .model-item,
+    #eeg-three-step-preview .prob-row,
+    #eeg-three-step-preview .signal-legend,
+    #eeg-three-step-preview .timeline-labels {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #eeg-three-step-preview .topbar {
+      border-bottom: 1px solid var(--line);
+      gap: 16px;
+      margin: 0 auto 20px;
+      max-width: 1420px;
+      padding: 2px 3px 14px;
+    }
+
+    #eeg-three-step-preview .brand {
+      font-size: 15px;
+      font-weight: 650;
+      gap: 10px;
+      justify-content: flex-start;
+      letter-spacing: .02em;
+    }
+
+    #eeg-three-step-preview .brand-icon {
+      align-items: center;
+      background: color-mix(in srgb, var(--cyan) 13%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--cyan) 42%, var(--line));
+      border-radius: 10px;
+      color: var(--cyan);
+      display: inline-flex;
+      font-size: 11px;
+      height: 34px;
+      justify-content: center;
+      letter-spacing: .06em;
+      width: 40px;
+    }
+
+    #eeg-three-step-preview .brand-note,
+    #eeg-three-step-preview .muted { color: var(--muted); }
+
+    #eeg-three-step-preview .brand-note { font-size: 12px; font-weight: 400; }
+
+    #eeg-three-step-preview .topbar-end { gap: 10px; }
+
+    #eeg-three-step-preview .local-chip,
+    #eeg-three-step-preview .preview-chip,
+    #eeg-three-step-preview .micro-chip,
+    #eeg-three-step-preview .status-chip {
+      align-items: center;
+      border-radius: 999px;
+      display: inline-flex;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    #eeg-three-step-preview .local-chip {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      padding: 6px 10px;
+    }
+
+    #eeg-three-step-preview .local-dot {
+      background: var(--blue);
+      border-radius: 50%;
+      box-shadow: 0 0 10px color-mix(in srgb, var(--green) 70%, transparent);
+      height: 7px;
+      width: 7px;
+    }
+
+    #eeg-three-step-preview .page { margin: 0 auto; max-width: 1420px; }
+
+    #eeg-three-step-preview .heading-row {
+      align-items: flex-end;
+      gap: 16px;
+      margin: 0 3px 18px;
+    }
+
+    #eeg-three-step-preview .eyebrow,
+    #eeg-three-step-preview .panel-kicker {
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .13em;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+    }
+
+    #eeg-three-step-preview h1 {
+      font-size: clamp(23px, 3vw, 32px);
+      letter-spacing: -.035em;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    #eeg-three-step-preview .intro {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0 0;
+      max-width: 620px;
+    }
+
+    #eeg-three-step-preview .stepper {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin: 0 3px 17px;
+    }
+
+    #eeg-three-step-preview .step-pill {
+      align-items: center;
+      color: var(--muted);
+      display: inline-flex;
+      font-size: 11px;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    #eeg-three-step-preview .step-number {
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: inline-flex;
+      height: 24px;
+      justify-content: center;
+      width: 24px;
+    }
+
+    #eeg-three-step-preview .step-pill.active { color: var(--ink); }
+    #eeg-three-step-preview .step-pill.active .step-number {
+      background: color-mix(in srgb, var(--cyan) 15%, var(--surface));
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    #eeg-three-step-preview .step-pill.complete .step-number {
+      background: color-mix(in srgb, var(--green) 16%, var(--surface));
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    #eeg-three-step-preview .step-connector {
+      background: var(--line);
+      height: 1px;
+      width: clamp(16px, 3vw, 34px);
+    }
+
+    #eeg-three-step-preview .view[hidden] { display: none !important; }
+
+    #eeg-three-step-preview .panel {
+      background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, var(--blue)), var(--surface));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    #eeg-three-step-preview .landing-grid {
+      align-items: stretch;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .9fr);
+    }
+
+    #eeg-three-step-preview .welcome-panel {
+      align-content: center;
+      display: grid;
+      min-height: 445px;
+      padding: clamp(24px, 5vw, 56px);
+    }
+
+    #eeg-three-step-preview .welcome-panel h2 {
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -.035em;
+      line-height: 1.12;
+      margin: 0;
+      max-width: 520px;
+    }
+
+    #eeg-three-step-preview .welcome-copy {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 12px 0 22px;
+      max-width: 500px;
+    }
+
+    #eeg-three-step-preview .ready-list {
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 0;
+      margin: 0 0 22px;
+      max-width: 520px;
+    }
+
+    #eeg-three-step-preview .ready-item {
+      align-items: center;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      color: var(--muted);
+      display: flex;
+      font-size: 12px;
+      gap: 10px;
+      justify-content: space-between;
+      min-height: 39px;
+    }
+
+    #eeg-three-step-preview .ready-item strong {
+      color: var(--ink);
+      font-weight: 550;
+    }
+
+    #eeg-three-step-preview .ready-status {
+      color: var(--green);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    #eeg-three-step-preview .action-row {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #eeg-three-step-preview .button {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      min-height: 44px;
+      padding: 0 16px;
+    }
+
+    #eeg-three-step-preview .button.primary {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: light-dark(#ffffff, #07111c);
+      font-weight: 650;
+    }
+
+    #eeg-three-step-preview .button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    #eeg-three-step-preview .button:focus-visible,
+    #eeg-three-step-preview input:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    #eeg-three-step-preview .local-note {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 14px 0 0;
+    }
+
+    #eeg-three-step-preview .brain-teaser {
+      align-items: center;
+      background:
+        radial-gradient(ellipse at 50% 45%, color-mix(in srgb, var(--blue) 20%, transparent), transparent 57%),
+        var(--surface-2);
+      display: flex;
+      justify-content: center;
+      min-height: 445px;
+      padding: 20px;
+      position: relative;
+    }
+
+    #eeg-three-step-preview .brain-image-stage {
+      background: radial-gradient(ellipse at 50% 48%, rgba(5, 74, 105, .55), transparent 62%), #03111b;
+      border-radius: inherit;
+      inset: 0;
+      overflow: hidden;
+      position: absolute;
+    }
+
+    #eeg-three-step-preview .brain-reference-video {
+      background: #03111b;
+      height: 100%;
+      inset: 0;
+      object-fit: contain;
+      position: absolute;
+      width: 100%;
+      z-index: 0;
+    }
+
+    #eeg-three-step-preview .brain-motion-toggle {
+      bottom: 16px;
+      position: absolute;
+      right: 16px;
+      z-index: 2;
+    }
+
+    #eeg-three-step-preview .brain-teaser-label {
+      align-self: flex-end;
+      background: color-mix(in srgb, var(--surface) 82%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 11px;
+      margin: 0;
+      padding: 7px 10px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    #eeg-three-step-preview .upload-layout {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+    }
+
+    #eeg-three-step-preview .upload-panel,
+    #eeg-three-step-preview .upload-context {
+      padding: clamp(20px, 4vw, 36px);
+    }
+
+    #eeg-three-step-preview .upload-panel h2,
+    #eeg-three-step-preview .upload-context h2 {
+      font-size: 20px;
+      letter-spacing: -.02em;
+      margin: 0;
+    }
+
+    #eeg-three-step-preview .upload-copy {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 8px 0 22px;
+    }
+
+    #eeg-three-step-preview .drop-zone {
+      align-items: center;
+      background: var(--surface-2);
+      border: 1px dashed color-mix(in srgb, var(--cyan) 55%, var(--line));
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+      min-height: 176px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #eeg-three-step-preview .upload-mark {
+      align-items: center;
+      background: color-mix(in srgb, var(--cyan) 13%, var(--surface));
+      border-radius: 12px;
+      color: var(--cyan);
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 700;
+      height: 42px;
+      justify-content: center;
+      letter-spacing: .06em;
+      width: 52px;
+    }
+
+    #eeg-three-step-preview .drop-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 3px 0 0;
+    }
+
+    #eeg-three-step-preview .drop-help {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0;
+    }
+
+    #eeg-three-step-preview .file-input {
+      color: var(--muted);
+      font: inherit;
+      font-size: 12px;
+      max-width: 100%;
+    }
+
+    #eeg-three-step-preview .file-row {
+      color: var(--muted);
+      font-size: 12px;
+      gap: 10px;
+      margin: 14px 0 18px;
+    }
+
+    #eeg-three-step-preview .file-row strong {
+      color: var(--ink);
+      font-weight: 550;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    #eeg-three-step-preview .upload-context {
+      background:
+        radial-gradient(ellipse at 80% 15%, color-mix(in srgb, var(--orange) 9%, transparent), transparent 50%),
+        var(--surface);
+    }
+
+    #eeg-three-step-preview .context-list {
+      color: var(--muted);
+      display: grid;
+      font-size: 12px;
+      gap: 13px;
+      margin: 20px 0 0;
+      padding: 0;
+    }
+
+    #eeg-three-step-preview .context-list li {
+      align-items: flex-start;
+      display: flex;
+      gap: 9px;
+      list-style: none;
+    }
+
+    #eeg-three-step-preview .context-list li::before {
+      background: var(--cyan);
+      border-radius: 50%;
+      content: "";
+      flex: 0 0 7px;
+      height: 7px;
+      margin-top: 6px;
+    }
+
+    #eeg-three-step-preview .results-head {
+      align-items: flex-end;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin: 0 3px 15px;
+    }
+
+    #eeg-three-step-preview .recording-tag {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    #eeg-three-step-preview .recording-tag strong {
+      color: var(--ink);
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    #eeg-three-step-preview .analysis-grid {
+      display: grid;
+      gap: 13px;
+      grid-template-columns: minmax(150px, .58fr) minmax(400px, 1.78fr) minmax(260px, .98fr);
+    }
+
+    #eeg-three-step-preview .panel-head { gap: 10px; padding: 13px 14px 9px; }
+
+    #eeg-three-step-preview .panel-title {
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .01em;
+      margin: 0;
+    }
+
+    #eeg-three-step-preview .panel-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 3px 0 0;
+    }
+
+    #eeg-three-step-preview .micro-chip {
+      background: var(--surface-3);
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .04em;
+      padding: 5px 8px;
+      text-transform: uppercase;
+    }
+
+    #eeg-three-step-preview .wave-list { padding: 0 12px; }
+
+    #eeg-three-step-preview .wave-row {
+      align-items: center;
+      border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      display: grid;
+      gap: 7px;
+      grid-template-columns: 25px minmax(0, 1fr);
+      min-height: 48px;
+    }
+
+    #eeg-three-step-preview .channel-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    #eeg-three-step-preview .wave {
+      display: block;
+      height: 31px;
+      width: 100%;
+    }
+
+    #eeg-three-step-preview .wave path {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-dasharray: 5 7;
+      stroke-linecap: round;
+      stroke-width: 1.8;
+      animation: eeg-trace 1.8s linear infinite;
+    }
+
+    #eeg-three-step-preview .wave-row:nth-child(2) path { stroke: var(--blue); animation-duration: 2.2s; }
+    #eeg-three-step-preview .wave-row:nth-child(3) path { stroke: var(--orange); animation-duration: 1.6s; }
+    #eeg-three-step-preview .wave-row:nth-child(4) path { stroke: var(--violet); animation-duration: 2s; }
+
+    #eeg-three-step-preview .wave-foot {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      margin: 8px 12px 0;
+      padding: 9px 0 12px;
+    }
+
+    #eeg-three-step-preview .brain-result-panel {
+      background:
+        radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--blue) 20%, transparent), transparent 55%),
+        var(--surface-2);
+      min-height: 400px;
+      position: relative;
+    }
+
+    #eeg-three-step-preview .brain-canvas-wrap {
+      height: 380px;
+      position: relative;
+    }
+
+    #eeg-three-step-preview .brain-result-stage {
+      border-radius: 10px;
+      height: 100%;
+      inset: 0;
+      overflow: hidden;
+      position: absolute;
+      width: 100%;
+    }
+
+    #eeg-three-step-preview .brain-caption {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 0 14px 11px;
+      text-align: center;
+    }
+
+
+    #eeg-three-step-preview .result-rail {
+      display: grid;
+      gap: 13px;
+      grid-template-rows: auto auto;
+      min-width: 0;
+    }
+
+    #eeg-three-step-preview .emotion-block { padding: 0 14px 11px; }
+
+    #eeg-three-step-preview .emotion-line {
+      align-items: flex-end;
+      display: flex;
+      justify-content: space-between;
+      margin: 3px 0 12px;
+    }
+
+    #eeg-three-step-preview .emotion-word {
+      color: var(--orange);
+      font-size: 25px;
+      font-weight: 750;
+      letter-spacing: .05em;
+      line-height: 1;
+      margin: 0 0 4px;
+    }
+
+    #eeg-three-step-preview .confidence {
+      font-size: 21px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    #eeg-three-step-preview .small-label {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    #eeg-three-step-preview .prob-list { display: grid; gap: 8px; }
+
+    #eeg-three-step-preview .prob-row {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 48px minmax(0, 1fr) 40px;
+    }
+
+    #eeg-three-step-preview .prob-label,
+    #eeg-three-step-preview .prob-value {
+      color: var(--muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #eeg-three-step-preview .prob-value { color: var(--ink); text-align: right; }
+
+    #eeg-three-step-preview .meter {
+      background: var(--surface-3);
+      border-radius: 999px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    #eeg-three-step-preview .meter-fill {
+      background: var(--orange);
+      border-radius: inherit;
+      display: block;
+      height: 100%;
+    }
+
+    #eeg-three-step-preview .happy .meter-fill { background: var(--yellow); }
+    #eeg-three-step-preview .neutral .meter-fill { background: var(--cyan); }
+    #eeg-three-step-preview .sad .meter-fill { background: var(--violet); }
+
+    #eeg-three-step-preview .model-list {
+      border-top: 1px solid var(--line);
+      margin: 0 14px;
+      padding: 8px 0 9px;
+    }
+
+    #eeg-three-step-preview .model-heading {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin: 0 0 4px;
+      text-transform: uppercase;
+    }
+
+    #eeg-three-step-preview .model-item {
+      color: var(--muted);
+      font-size: 11px;
+      gap: 8px;
+      min-height: 24px;
+    }
+
+    #eeg-three-step-preview .model-item strong {
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 550;
+      white-space: nowrap;
+    }
+
+    #eeg-three-step-preview .activity-key { min-height: 190px; padding-bottom: 8px; }
+
+    #eeg-three-step-preview .activity-key-body {
+      align-items: center;
+      display: grid;
+      gap: 10px 9px;
+      grid-template-columns: 12px minmax(0, 1fr);
+      margin: 8px 14px 10px;
+    }
+
+    #eeg-three-step-preview .activity-key-body strong {
+      color: var(--ink);
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    #eeg-three-step-preview .activity-key-body div span {
+      color: var(--muted);
+      display: block;
+      font-size: 10px;
+      margin-top: 1px;
+    }
+
+    #eeg-three-step-preview .activity-swatch {
+      animation: eeg-activity-glow 1.7s ease-in-out infinite alternate;
+      background: var(--blue);
+      border-radius: 50%;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--blue) 72%, transparent);
+      height: 9px;
+      width: 9px;
+    }
+
+    #eeg-three-step-preview .activity-swatch.orange {
+      animation-delay: .3s;
+      background: var(--orange);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--orange) 72%, transparent);
+    }
+
+    #eeg-three-step-preview .activity-swatch.violet {
+      animation-delay: .6s;
+      background: var(--violet);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--violet) 72%, transparent);
+    }
+
+    #eeg-three-step-preview .activity-note {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+      margin: 0 14px;
+      padding-top: 8px;
+    }
+
+    #eeg-three-step-preview .lower-grid {
+      display: grid;
+      gap: 13px;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+      margin-top: 13px;
+    }
+
+    #eeg-three-step-preview .maps-panel,
+    #eeg-three-step-preview .path-panel { min-height: 205px; }
+
+    #eeg-three-step-preview .maps {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 0 13px;
+    }
+
+    #eeg-three-step-preview .map {
+      display: block;
+      height: 103px;
+      margin: 0 auto;
+      max-width: 165px;
+      width: 100%;
+    }
+
+    #eeg-three-step-preview .map-shape {
+      fill: color-mix(in srgb, var(--blue) 9%, var(--surface-2));
+      stroke: color-mix(in srgb, var(--blue) 42%, var(--line));
+      stroke-width: 1.5;
+    }
+
+    #eeg-three-step-preview .map-link {
+      fill: none;
+      opacity: .58;
+      stroke: color-mix(in srgb, var(--cyan) 32%, var(--line));
+      stroke-width: 1;
+    }
+
+    #eeg-three-step-preview .map-dot {
+      fill: var(--cyan);
+      stroke: var(--surface);
+      stroke-width: 1;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: eeg-map-pulse 2.2s ease-in-out infinite alternate;
+    }
+
+    #eeg-three-step-preview .map-dot.hot { fill: var(--orange); }
+
+    #eeg-three-step-preview .map-caption {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 1px;
+      text-align: center;
+    }
+
+    #eeg-three-step-preview .analysis-steps {
+      display: grid;
+      gap: 6px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding: 11px 14px 8px;
+    }
+
+    #eeg-three-step-preview .analysis-step {
+      color: var(--muted);
+      font-size: 11px;
+      min-width: 0;
+    }
+
+    #eeg-three-step-preview .analysis-step::before {
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 9px color-mix(in srgb, var(--green) 52%, transparent);
+      content: "";
+      display: block;
+      height: 8px;
+      margin-bottom: 7px;
+      width: 8px;
+    }
+
+    #eeg-three-step-preview .analysis-step strong {
+      color: var(--ink);
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    #eeg-three-step-preview .timeline {
+      border-top: 1px solid var(--line);
+      margin: 6px 14px 0;
+      padding: 9px 0 12px;
+    }
+
+    #eeg-three-step-preview .timeline-labels {
+      color: var(--muted);
+      font-size: 11px;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    #eeg-three-step-preview .timeline-track {
+      background: var(--surface-3);
+      border-radius: 999px;
+      height: 7px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #eeg-three-step-preview .timeline-fill {
+      background: linear-gradient(90deg, var(--blue), var(--cyan), var(--green));
+      border-radius: inherit;
+      height: 100%;
+      width: 100%;
+    }
+
+    #eeg-three-step-preview .timeline-playhead {
+      animation: eeg-playhead 4.2s linear infinite;
+      background: var(--ink);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 28%, transparent), 0 0 9px var(--cyan);
+      height: 7px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 7px;
+    }
+
+    #eeg-three-step-preview .results-footer {
+      align-items: center;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 11px;
+      gap: 10px;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 0 3px;
+    }
+
+    #eeg-three-step-preview .status-chip {
+      background: color-mix(in srgb, var(--green) 12%, var(--surface));
+      color: var(--green);
+      font-size: 11px;
+      padding: 5px 8px;
+    }
+
+    #eeg-three-step-preview .status-chip::before {
+      background: currentColor;
+      border-radius: 50%;
+      content: "";
+      height: 6px;
+      width: 6px;
+    }
+
+    #eeg-three-step-preview .text-button {
+      background: transparent;
+      border: 0;
+      color: var(--cyan);
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      padding: 8px 0;
+    }
+
+    #eeg-three-step-preview .is-paused *,
+    #eeg-three-step-preview .is-paused *::before,
+    #eeg-three-step-preview .is-paused *::after {
+      animation-play-state: paused !important;
+    }
+
+    @keyframes eeg-trace { to { stroke-dashoffset: -48; } }
+    @keyframes eeg-activity-glow { from { opacity: .62; transform: scale(.82); } to { opacity: 1; transform: scale(1.18); } }
+    @keyframes eeg-map-pulse { from { opacity: .58; transform: scale(.9); } to { opacity: 1; transform: scale(1.15); } }
+    @keyframes eeg-playhead { from { left: 0; } to { left: calc(100% - 7px); } }
+
+    @media (max-width: 980px) {
+      #eeg-three-step-preview .analysis-grid {
+        grid-template-columns: minmax(0, .8fr) minmax(330px, 1.2fr);
+      }
+      #eeg-three-step-preview .brain-result-panel { grid-column: 1 / -1; grid-row: 1; }
+      #eeg-three-step-preview .result-rail { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
+    }
+
+    @media (max-width: 700px) {
+      #eeg-three-step-preview .shell { padding: 12px; }
+      #eeg-three-step-preview .landing-grid,
+      #eeg-three-step-preview .upload-layout,
+      #eeg-three-step-preview .analysis-grid,
+      #eeg-three-step-preview .lower-grid,
+      #eeg-three-step-preview .result-rail { grid-template-columns: minmax(0, 1fr); }
+      #eeg-three-step-preview .brain-result-panel { grid-column: auto; }
+      #eeg-three-step-preview .heading-row,
+      #eeg-three-step-preview .results-head { align-items: flex-start; flex-direction: column; }
+      #eeg-three-step-preview .recording-tag { text-align: left; }
+      #eeg-three-step-preview .stepper { justify-content: flex-start; margin-top: 16px; }
+      #eeg-three-step-preview .step-pill { font-size: 11px; }
+      #eeg-three-step-preview .step-connector { width: 12px; }
+      #eeg-three-step-preview .welcome-panel { min-height: 350px; }
+      #eeg-three-step-preview .brain-teaser { min-height: 430px; }
+      #eeg-three-step-preview .brain-canvas-wrap { height: 420px; }
+      #eeg-three-step-preview .brand-note { display: none; }
+      #eeg-three-step-preview .analysis-steps { gap: 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #eeg-three-step-preview *,
+      #eeg-three-step-preview *::before,
+      #eeg-three-step-preview *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+
+
+    #eeg-three-step-preview .local-dot.online { background: var(--green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 18%, transparent); }
+    #eeg-three-step-preview .local-dot.offline { background: #ff667d; box-shadow: 0 0 0 4px rgba(255, 102, 125, .16); }
+    #eeg-three-step-preview .module-api-status { display: inline-flex; margin: 8px 0; padding: 4px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; font-weight: 700; }
+    #eeg-three-step-preview .module-api-status.online { border-color: color-mix(in srgb, var(--green) 50%, var(--line)); color: var(--green); }
+    #eeg-three-step-preview .module-api-status.offline { border-color: rgba(255, 102, 125, .48); color: #ff8797; }
+    #eeg-three-step-preview .error-message { margin-top: 12px; padding: 10px 12px; border: 1px solid rgba(255, 102, 125, .45); border-radius: 10px; background: rgba(255, 102, 125, .09); color: #ff9aaa; line-height: 1.45; }
+    #eeg-three-step-preview .prob-list { display: grid; gap: 8px; margin-top: 12px; }
+    #eeg-three-step-preview .probability-row { display: grid; grid-template-columns: 72px minmax(60px, 1fr) 50px; align-items: center; gap: 9px; }
+    #eeg-three-step-preview .probability-label { color: var(--muted); font-size: 11px; font-weight: 650; text-transform: capitalize; }
+    #eeg-three-step-preview .probability-track { height: 7px; overflow: hidden; border-radius: 999px; background: var(--surface-3); }
+    #eeg-three-step-preview .probability-fill { display: block; height: 100%; min-width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--cyan), var(--blue)); transition: width .3s ease; }
+    #eeg-three-step-preview .probability-value { color: var(--ink); font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
+    #eeg-three-step-preview .model-output-list { display: grid; gap: 8px; }
+    #eeg-three-step-preview .model-card { padding: 9px 0; border-top: 1px solid var(--line); }
+    #eeg-three-step-preview .model-name { color: var(--muted); font-size: 11px; }
+    #eeg-three-step-preview .model-prediction { color: var(--ink); font-size: 12px; font-weight: 750; text-transform: capitalize; }
+    #eeg-three-step-preview .model-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    #eeg-three-step-preview .model-details { margin-top: 6px; color: var(--muted); font-size: 10px; }
+    #eeg-three-step-preview .model-details summary { cursor: pointer; }
+    #eeg-three-step-preview .mini-probabilities { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; margin-top: 5px; }
+    #eeg-three-step-preview .fusion-block { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+    #eeg-three-step-preview .fusion-information { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    #eeg-three-step-preview .fusion-card { padding: 8px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); }
+    #eeg-three-step-preview .fusion-title { margin: 0 0 6px; color: var(--muted); font-size: 10px; font-weight: 700; }
+    #eeg-three-step-preview .fusion-rows { display: grid; gap: 3px; }
+    #eeg-three-step-preview .fusion-row { display: flex; justify-content: space-between; gap: 8px; color: var(--ink); font-size: 9px; }
+    #eeg-three-step-preview .window-counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin: 12px 0; }
+    #eeg-three-step-preview .count-card { padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+    #eeg-three-step-preview .count-label { display: block; color: var(--muted); font-size: 9px; }
+    #eeg-three-step-preview .count-value { display: block; margin-top: 2px; color: var(--ink); font-size: 13px; font-weight: 750; font-variant-numeric: tabular-nums; }
+    #eeg-three-step-preview .confidence-description { margin: 8px 0 0; color: var(--muted); font-size: 11px; }
+    #eeg-three-step-preview .empty-data { color: var(--muted); font-size: 11px; }

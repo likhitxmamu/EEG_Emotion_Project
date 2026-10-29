@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111c">
+  <meta name="description" content="Local EEG emotion analysis with saved models and a 3D brain animation.">
+  <title>EEG Emotion AI · Local analysis</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>window.EEG_API_BASE_URL = "http://127.0.0.1:8001";</script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div id="eeg-three-step-preview" aria-label="Local EEG emotion analysis">
+<div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">EEG</span>
+        <span>EEG Emotion AI</span>
+        <span class="brand-note">local analysis studio</span>
+      </div>
+      <div class="topbar-end">
+        <span class="local-chip"><span id="health-indicator" class="local-dot" aria-hidden="true"></span><span id="health-text">Checking backend…</span></span>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="heading-row">
+        <div>
+          <p class="eyebrow">LOCAL EEG ANALYSIS</p>
+          <h1>Emotion analysis</h1>
+          <p class="intro">Start the local models, select a MATLAB recording, and review the emotion result.</p>
+        </div>
+        <span class="preview-chip">LIVE LOCAL INFERENCE</span>
+      </div>
+
+      <nav class="stepper" aria-label="Analysis steps">
+        <span class="step-pill active" data-step-label="1" data-flow-step="1"><span class="step-number">1</span>Start modules</span>
+        <span class="step-connector" aria-hidden="true"></span>
+        <span class="step-pill" data-step-label="2" data-flow-step="2"><span class="step-number">2</span>Choose recording</span>
+        <span class="step-connector" aria-hidden="true"></span>
+        <span class="step-pill" data-step-label="3" data-flow-step="3"><span class="step-number">3</span>Review results</span>
+      </nav>
+
+      <section id="module-start-panel" class="view" data-view="1" aria-labelledby="start-title">
+        <div class="landing-grid">
+          <article class="panel welcome-panel">
+            <p class="panel-kicker">STEP 1 · PREPARE</p>
+            <h2 id="start-title">Start local modules</h2>
+            <p id="module-api-status" class="module-api-status">Checking backend…</p>
+            <p class="welcome-copy">Connect to the local inference service. Saved model checkpoints load when you run the first recording.</p>
+            <div class="ready-list" aria-label="Models included in the local pipeline">
+              <div class="ready-item"><strong>EEGNet + GCN</strong><span class="ready-status">Saved locally</span></div>
+              <div class="ready-item"><strong>Raw EEG Transformer</strong><span class="ready-status">Saved locally</span></div>
+              <div class="ready-item"><strong>STFT CRNN</strong><span class="ready-status">Saved locally</span></div>
+              <div class="ready-item"><strong>STFT Transformer</strong><span class="ready-status">Saved locally</span></div>
+            </div>
+            <div class="action-row">
+              <button id="start-modules-button" class="button primary" type="button">Start local modules</button>
+            </div>
+            <p id="module-start-message" class="local-note" aria-live="polite">The site checks the local API before showing the file picker.</p>
+          </article>
+          <aside class="panel brain-teaser" aria-label="Animated 3D brain preview">
+            <div class="brain-image-stage" aria-hidden="true">
+              <video class="brain-reference-video" autoplay loop muted playsinline preload="auto" aria-hidden="true"><source src="brain-signal-loop.mp4" type="video/mp4"></video>
+            </div>
+            <button id="signal-motion-button" class="button brain-motion-toggle" type="button" aria-pressed="false">Pause 3D animation</button>
+          </aside>
+        </div>
+      </section>
+
+      <section id="upload-panel" class="view" data-view="2" aria-labelledby="upload-title" hidden>
+        <div class="upload-layout">
+          <article class="panel upload-panel">
+            <p class="panel-kicker">STEP 2 · SELECT EEG DATA</p>
+            <h2 id="upload-title">Choose a MATLAB recording</h2>
+            <p class="upload-copy">Choose one .mat recording. The local inference service will validate and analyze the file.</p>
+            <label class="drop-zone" id="upload-zone" for="file-input">
+              <span class="upload-mark" aria-hidden="true">MAT</span>
+              <span class="drop-title">Select an EEG file</span>
+              <span class="drop-help">MATLAB file · .mat format</span>
+              <input class="file-input" id="file-input" name="file" type="file" accept=".mat">
+            </label>
+            <div class="file-row"><span>Selected file</span><strong id="file-name">No file selected</strong></div>
+            <div id="error-message" class="error-message" role="alert" aria-live="assertive" hidden></div>
+            <div class="action-row">
+              <button id="predict-button" class="button primary" type="button" disabled><span id="predict-button-label">Run local analysis</span></button>
+              <button id="reset-button" class="text-button" type="button">Reset / Upload Another File</button>
+            </div>
+            <p class="local-note" data-upload-status aria-live="polite">Choose a .mat file to enable analysis.</p>
+          </article>
+          <aside class="panel upload-context">
+            <p class="panel-kicker">WHAT HAPPENS NEXT</p>
+            <h2>One recording, four models</h2>
+            <ul class="context-list">
+              <li>EEG is checked for the expected 62 channels.</li>
+              <li>The recording is divided into overlapping analysis windows.</li>
+              <li>Raw-signal and spectrogram models run locally.</li>
+              <li>The four model outputs are combined into one result.</li>
+            </ul>
+            <p class="local-note">Choose the recording you want to analyze. Each submitted file is sent to the local model service.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="results" class="view" data-view="3" aria-labelledby="results-title" aria-live="polite" aria-busy="false" hidden>
+        <div class="results-head">
+          <div>
+            <p class="eyebrow">STEP 3 · ANALYSIS COMPLETE</p>
+            <h1 id="results-title">Recording results</h1>
+          </div>
+          <div class="recording-tag"><strong id="result-file">No recording yet</strong><span id="result-record-meta">Analysis details appear after the local prediction.</span></div>
+        </div>
+
+        <section class="analysis-grid" aria-label="3D brain, EEG signals, and emotion result">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">EEG channels</h2>
+                <p class="panel-subtitle">Waveform replay</p>
+              </div>
+              <span class="micro-chip">200 Hz</span>
+            </div>
+            <div class="wave-list" role="img" aria-label="Illustrative moving EEG waveforms for selected channels">
+              <div class="wave-row"><span class="channel-label">F3</span><svg class="wave" viewBox="0 0 180 32" preserveAspectRatio="none" aria-hidden="true"><path d="M0 16 C8 6 14 26 23 16 S37 8 46 17 S59 24 68 14 S81 8 90 18 S104 23 113 13 S127 8 136 17 S150 23 159 14 S172 9 180 16"/></svg></div>
+              <div class="wave-row"><span class="channel-label">C3</span><svg class="wave" viewBox="0 0 180 32" preserveAspectRatio="none" aria-hidden="true"><path d="M0 17 C10 21 11 8 21 14 S32 25 42 16 S54 9 64 17 S77 24 87 15 S98 8 108 17 S120 25 130 14 S143 10 153 17 S168 23 180 13"/></svg></div>
+              <div class="wave-row"><span class="channel-label">P3</span><svg class="wave" viewBox="0 0 180 32" preserveAspectRatio="none" aria-hidden="true"><path d="M0 15 C9 8 15 22 24 16 S38 9 47 19 S59 23 68 14 S82 8 91 16 S104 24 113 15 S125 8 135 17 S148 22 158 14 S172 10 180 18"/></svg></div>
+              <div class="wave-row"><span class="channel-label">O1</span><svg class="wave" viewBox="0 0 180 32" preserveAspectRatio="none" aria-hidden="true"><path d="M0 16 C8 24 15 10 24 16 S37 22 46 13 S59 9 68 18 S81 25 90 15 S103 9 112 17 S126 22 135 14 S148 8 157 17 S171 24 180 15"/></svg></div>
+            </div>
+            <div class="wave-foot">Selected channels · illustrative motion</div>
+          </article>
+
+          <article class="panel brain-result-panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">3D brain activity</h2>
+                <p class="panel-subtitle">Looping 3D brain video · glowing activity animation</p>
+              </div>
+              <span class="micro-chip">3D VIEW</span>
+            </div>
+            <div class="brain-canvas-wrap">
+              <div class="brain-result-stage brain-image-stage neural-stage" aria-label="Animated 3D brain video">
+                <video class="brain-reference-video" autoplay loop muted playsinline preload="auto" aria-hidden="true"><source src="brain-signal-loop.mp4" type="video/mp4"></video>
+              </div>
+            </div>
+            <p class="brain-caption">Illustrative signal animation · not measured neural localization</p>
+          </article>
+
+          <div class="result-rail">
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">Emotion detection</h2>
+                  <p class="panel-subtitle">Four-model adaptive fusion</p>
+                </div>
+                <span class="micro-chip">RESULT</span>
+              </div>
+              <div class="emotion-block">
+                <div class="emotion-line">
+                  <div><p id="result-emotion" class="emotion-word">—</p><span class="small-label">Predicted emotion</span></div>
+                  <div><div id="result-confidence" class="confidence">—</div><div class="small-label">uncalibrated score</div></div>
+                </div>
+                <p id="confidence-description" class="confidence-description">Waiting for a local prediction.</p>
+                <div id="probability-list" class="prob-list" aria-label="Fused emotion scores"></div>
+                <div class="model-list">
+                  <p class="model-heading">Individual model outputs</p>
+                  <div id="model-results" class="model-output-list"></div>
+                </div>
+                <div class="fusion-block">
+                  <p class="model-heading">Adaptive fusion details</p>
+                  <div id="fusion-information" class="fusion-information"></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel activity-key">
+              <div class="panel-head">
+                <div>
+                  <h2 class="panel-title">3D activity key</h2>
+                  <p class="panel-subtitle">Animated regions on the brain</p>
+                </div>
+                <span class="micro-chip">LIVE</span>
+              </div>
+              <div class="activity-key-body">
+                <span class="activity-swatch blue"></span><div><strong>Electric blue</strong><span>Glowing outer cortex</span></div>
+                <span class="activity-swatch orange"></span><div><strong>Orange and yellow</strong><span>Animated activity regions</span></div>
+                <span class="activity-swatch violet"></span><div><strong>Magenta accents</strong><span>Secondary highlights</span></div>
+              </div>
+              <p class="activity-note">The animated colors are an illustrative view. They are not a measured brain-region localization.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="lower-grid" aria-label="Two-sided sensor maps and analysis path">
+          <article class="panel maps-panel">
+            <div class="panel-head">
+              <div><h2 class="panel-title">Two-sided scalp map</h2><p class="panel-subtitle">Electrode activity overview</p></div>
+              <span class="micro-chip">62 CHANNELS</span>
+            </div>
+            <div class="maps">
+              <div>
+                <svg class="map" viewBox="0 0 180 120" role="img" aria-label="Schematic left-hemisphere scalp activity map">
+                  <path class="map-shape" d="M90 10 C57 10 34 30 34 61 C34 89 55 108 82 111 C87 112 93 112 98 111 C125 108 146 89 146 61 C146 30 123 10 90 10Z"/>
+                  <path class="map-link" d="M90 25 70 32 55 47 48 63 57 82 72 97 M90 25 110 32 125 47 132 63 123 82 108 97 M70 32 90 44 110 32 M55 47 75 46 90 44 105 46 125 47 M48 63 68 62 90 63 112 62 132 63 M57 82 76 81 90 83 104 81 123 82 M72 97 90 99 108 97 M75 46 68 62 76 81 M90 44 90 63 90 83 90 99 M105 46 112 62 104 81"/>
+                  <circle class="map-dot hot" cx="90" cy="25" r="3.5"/><circle class="map-dot hot" cx="70" cy="32" r="3.5"/><circle class="map-dot" cx="110" cy="32" r="3.5"/>
+                  <circle class="map-dot hot" cx="55" cy="47" r="3.5"/><circle class="map-dot hot" cx="75" cy="46" r="3.5"/><circle class="map-dot" cx="90" cy="44" r="3.5"/><circle class="map-dot" cx="105" cy="46" r="3.5"/><circle class="map-dot" cx="125" cy="47" r="3.5"/>
+                  <circle class="map-dot hot" cx="48" cy="63" r="3.5"/><circle class="map-dot hot" cx="68" cy="62" r="3.5"/><circle class="map-dot" cx="90" cy="63" r="3.5"/><circle class="map-dot" cx="112" cy="62" r="3.5"/><circle class="map-dot" cx="132" cy="63" r="3.5"/>
+                  <circle class="map-dot hot" cx="57" cy="82" r="3.5"/><circle class="map-dot" cx="76" cy="81" r="3.5"/><circle class="map-dot" cx="90" cy="83" r="3.5"/><circle class="map-dot" cx="104" cy="81" r="3.5"/><circle class="map-dot" cx="123" cy="82" r="3.5"/>
+                  <circle class="map-dot" cx="72" cy="97" r="3.5"/><circle class="map-dot" cx="90" cy="99" r="3.5"/><circle class="map-dot" cx="108" cy="97" r="3.5"/>
+                </svg>
+                <div class="map-caption">Left hemisphere</div>
+              </div>
+              <div>
+                <svg class="map" viewBox="0 0 180 120" role="img" aria-label="Schematic right-hemisphere scalp activity map">
+                  <path class="map-shape" d="M90 10 C57 10 34 30 34 61 C34 89 55 108 82 111 C87 112 93 112 98 111 C125 108 146 89 146 61 C146 30 123 10 90 10Z"/>
+                  <path class="map-link" d="M90 25 70 32 55 47 48 63 57 82 72 97 M90 25 110 32 125 47 132 63 123 82 108 97 M70 32 90 44 110 32 M55 47 75 46 90 44 105 46 125 47 M48 63 68 62 90 63 112 62 132 63 M57 82 76 81 90 83 104 81 123 82 M72 97 90 99 108 97 M75 46 68 62 76 81 M90 44 90 63 90 83 90 99 M105 46 112 62 104 81"/>
+                  <circle class="map-dot" cx="90" cy="25" r="3.5"/><circle class="map-dot" cx="70" cy="32" r="3.5"/><circle class="map-dot hot" cx="110" cy="32" r="3.5"/>
+                  <circle class="map-dot" cx="55" cy="47" r="3.5"/><circle class="map-dot" cx="75" cy="46" r="3.5"/><circle class="map-dot" cx="90" cy="44" r="3.5"/><circle class="map-dot hot" cx="105" cy="46" r="3.5"/><circle class="map-dot hot" cx="125" cy="47" r="3.5"/>
+                  <circle class="map-dot" cx="48" cy="63" r="3.5"/><circle class="map-dot" cx="68" cy="62" r="3.5"/><circle class="map-dot" cx="90" cy="63" r="3.5"/><circle class="map-dot hot" cx="112" cy="62" r="3.5"/><circle class="map-dot hot" cx="132" cy="63" r="3.5"/>
+                  <circle class="map-dot" cx="57" cy="82" r="3.5"/><circle class="map-dot" cx="76" cy="81" r="3.5"/><circle class="map-dot" cx="90" cy="83" r="3.5"/><circle class="map-dot hot" cx="104" cy="81" r="3.5"/><circle class="map-dot hot" cx="123" cy="82" r="3.5"/>
+                  <circle class="map-dot" cx="72" cy="97" r="3.5"/><circle class="map-dot" cx="90" cy="99" r="3.5"/><circle class="map-dot" cx="108" cy="97" r="3.5"/>
+                </svg>
+                <div class="map-caption">Right hemisphere</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel path-panel">
+            <div class="panel-head">
+              <div><h2 class="panel-title">Analysis path</h2><p class="panel-subtitle">From recording to fused result</p></div>
+              <span class="micro-chip"><span id="window-total">—</span> WINDOWS</span>
+            </div>
+            <div class="analysis-steps">
+              <div class="analysis-step"><strong>Recording</strong>62-channel input</div>
+              <div class="analysis-step"><strong>Windows</strong>Overlapping segments</div>
+              <div class="analysis-step"><strong>Four models</strong>Raw + spectrogram</div>
+              <div class="analysis-step"><strong>Fusion</strong>One output</div>
+            </div>
+            <div id="window-counts" class="window-counts" aria-label="Window counts from this recording"></div>
+            <div class="timeline">
+              <div class="timeline-labels"><span>Selected recording</span><span id="window-count-summary">Waiting for analysis</span></div>
+              <div class="timeline-track" role="img" aria-label="Analysis timeline for the selected recording"><div class="timeline-fill"></div><span class="timeline-playhead"></span></div>
+            </div>
+          </article>
+        </section>
+
+        <div class="results-footer">
+          <span>Prediction comes from the local models. The brain video and scalp maps are illustrative, not a measured neural-source map. Confidence is not calibrated.</span>
+          <div class="action-row">
+            <button id="results-reset-button" class="text-button" type="button">Choose another file</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  </div>
+</body>
+</html>
